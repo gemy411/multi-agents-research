@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "com.gemy"
@@ -17,4 +18,7 @@ dependencies {
     implementation(libs.ktor.server.core)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+
+    implementation(libs.jetbrains.koog.agents)
+    implementation(libs.dotenv.kotlin)
 }
