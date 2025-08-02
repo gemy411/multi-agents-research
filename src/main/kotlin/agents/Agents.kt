@@ -5,18 +5,11 @@ import ai.koog.agents.core.agent.config.AIAgentConfig
 import ai.koog.agents.core.dsl.builder.forwardTo
 import ai.koog.agents.core.dsl.builder.strategy
 import ai.koog.agents.core.dsl.extension.*
-import ai.koog.agents.core.feature.handler.AgentFinishedContext
-import ai.koog.agents.core.feature.handler.AgentStartContext
-import ai.koog.agents.core.feature.model.AIAgentNodeExecutionStartEvent
-import ai.koog.agents.core.feature.model.ToolCallEvent
 import ai.koog.agents.core.tools.ToolRegistry
 import ai.koog.agents.core.tools.reflect.tools
 import ai.koog.agents.features.eventHandler.feature.EventHandler
-import ai.koog.agents.features.tracing.feature.Tracing
-import ai.koog.agents.features.tracing.writer.TraceFeatureMessageLogWriter
 import ai.koog.prompt.dsl.Prompt
 import com.gemy.agents.tools.MockToolSet
-import io.github.oshai.kotlinlogging.KotlinLogging.logger
 
 val waitingPoc = strategy("Agent") {
     val sendInput by nodeLLMRequest()
@@ -26,7 +19,6 @@ val waitingPoc = strategy("Agent") {
     edge(sendInput forwardTo useTool onToolCall {true})
     edge(useTool forwardTo sendToolResult)
     edge(sendToolResult forwardTo useTool onToolCall {true})
-//    edge(sendToolResult forwardTo sendInput transformed {it.content})
     edge(sendToolResult forwardTo nodeFinish onAssistantMessage {true})
 }
 val toolRegistry = ToolRegistry{
@@ -67,24 +59,15 @@ val agent = AIAgent(
     strategy = waitingPoc,
     installFeatures = {
         install(EventHandler){
-            onBeforeAgentStarted { eventContext: AgentStartContext<*> ->
-                println("Starting strategy: ${eventContext.strategy.name}")
+            onBeforeLLMCall {
+                println("Event request: ${it.prompt.messages.drop(1).reversed().joinToString { it.content }}")
             }
-            onAgentFinished { eventContext: AgentFinishedContext ->
-                println("Result: ${eventContext.result}")
+            onAfterLLMCall {
+                println("Event response: ${it.responses.filterNot { it.content.isBlank() }.joinToString { it.content }})")
             }
-            onBeforeNode { eventContext ->
-                println("Executing node: ${eventContext.node.name}")
-            }
-            onAfterNode { println("Finished node: ${it.node.name}") }
-        }
-        install(Tracing) {
-            // Configure message processors to handle trace events
-            addMessageProcessor(TraceFeatureMessageLogWriter(logger("my-logger")))
-            // Optionally filter messages
-            messageFilter = { message ->
-                // Only trace LLM calls and tool calls
-                message is AIAgentNodeExecutionStartEvent || message is ToolCallEvent
+            onToolCall {
+                val toolName = it.tool.name
+                println("Event tool call: $toolName")
             }
         }
     }
