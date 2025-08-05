@@ -5,6 +5,8 @@ This project aims to build a sophisticated multi-agent research system with adva
 ## Core Functionality Milestones
 
 - [ ] **Develop Functional Research Agents**: Create the foundational agent architecture with basic research capabilities, query processing, and information synthesis.
+- [ ] **True thinking during waiting times**: While the subagents are working, the researcher can think about the previous
+results and how it can utilize the given information to proceed with further research
 - [ ] **Optimize Parallel Processing**: Implement efficient parallelism through time-travel mechanisms and progress monitoring to maximize computational resources.
 - [ ] **Enhance Memory Management**: Optimize how agents store, retrieve, and utilize information to improve performance and reduce resource consumption.
 - [ ] **Implement Citation System**: Develop a robust citation framework to track information sources and ensure research credibility and traceability.
