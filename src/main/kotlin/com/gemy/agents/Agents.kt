@@ -5,11 +5,20 @@ import ai.koog.agents.core.agent.config.AIAgentConfig
 import ai.koog.agents.core.dsl.builder.forwardTo
 import ai.koog.agents.core.dsl.builder.strategy
 import ai.koog.agents.core.dsl.extension.*
+import ai.koog.agents.core.feature.model.AIAgentNodeExecutionEndEvent
+import ai.koog.agents.core.feature.model.ToolCallResultEvent
 import ai.koog.agents.core.tools.ToolRegistry
 import ai.koog.agents.core.tools.reflect.tools
 import ai.koog.agents.features.eventHandler.feature.EventHandler
+import ai.koog.agents.features.tracing.feature.Tracing
+import ai.koog.agents.features.tracing.writer.TraceFeatureMessageFileWriter
 import ai.koog.prompt.dsl.Prompt
+import ai.koog.rag.base.files.JVMFileSystemProvider
+import com.gemy.agents.models.OpenRouterConfig.openRouterExecutor
+import com.gemy.agents.models.geminiFlashModel
 import com.gemy.agents.tools.MockToolSet
+import kotlinx.coroutines.runBlocking
+import java.nio.file.Paths
 
 val waitingPoc = strategy("Agent") {
     val sendInput by nodeLLMRequest()
@@ -58,6 +67,8 @@ val agent = AIAgent(
     agentConfig = waitingAgentConfig,
     strategy = waitingPoc,
     installFeatures = {
+        val fs = JVMFileSystemProvider.ReadWrite
+        val path = Paths.get("./logs/trace-${System.currentTimeMillis()}.log")
         install(EventHandler){
             onBeforeLLMCall {
                 println("Event request: ${it.prompt.messages.drop(1).reversed().joinToString { it.content }}")
@@ -68,6 +79,14 @@ val agent = AIAgent(
             onToolCall {
                 val toolName = it.tool.name
                 println("Event tool call: $toolName")
+            }
+        }
+        install(Tracing) {
+            // Configure message processors to handle trace events
+            addMessageProcessor(TraceFeatureMessageFileWriter(path, { runBlocking { fs.sink(path, true) } }))
+            messageFilter = { message ->
+                        message is ToolCallResultEvent ||
+                        message is AIAgentNodeExecutionEndEvent
             }
         }
     }
