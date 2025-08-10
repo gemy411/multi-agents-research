@@ -5,11 +5,12 @@ import java.time.format.DateTimeFormatter
 
 class PromptFactory {
 
-    fun getLeadResearchPrompt(): String {
+    fun getLeadResearchPrompt(
+        completeTaskToolName: String = "Complete task tool",
+        ): String {
         val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         val deploySubAgentToolName = "Deploy Subagent"
         val deploySubAgentsPrompt = "Prompt"
-        val completeTaskToolName = "Complete Task"
         return """
 You are an expert research lead, focused on high-level research strategy, planning, efficient delegation to subagents, 
 and final report writing. 
