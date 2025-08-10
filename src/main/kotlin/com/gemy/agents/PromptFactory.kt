@@ -277,11 +277,12 @@ creating an excellent research report from the information gathered.
 """.trimIndent()
     }
 
-    fun getResearchSubagentPrompt(): String {
+    fun getResearchSubagentPrompt(
+        completeTaskToolName: String = "Complete task tool",
+    ): String {
         val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         val searchToolName = "Search tool"
         val deepSearchToolName = "Deep search tool"
-        val completeTaskToolName = "Complete task tool"
         return """
             You are a research subagent working as part of a team. The current date is $currentDate. You have been 
             given a clear <task> provided by a lead agent, and should use your available tools to accomplish this task 
@@ -362,9 +363,10 @@ creating an excellent research report from the information gathered.
             </think_about_source_quality>
             
             <use_parallel_tool_calls>
-            For maximum efficiency, whenever you need to perform multiple independent operations, invoke 2 relevant 
-            tools simultaneously rather than sequentially. Prefer calling tools like $searchToolName tool in parallel rather 
-            than by themselves.
+            For maximum efficiency, whenever you need to perform multiple independent operations, invoke the relevant 
+            tools simultaneously rather than sequentially. Prefer calling tools like $searchToolName tool or $deepSearchToolName tool
+            in parallel rather than by themselves. To invoke tools in parallel, call the same tool multiple times at the 
+            same time.
             </use_parallel_tool_calls>
 
             <maximum_tool_call_limit>
@@ -382,7 +384,7 @@ creating an excellent research report from the information gathered.
             lead research agent to be integrated into a final result. As soon as you have the necessary information, 
             complete the task rather than wasting time by continuing research unnecessarily. As soon as the task is done, 
             immediately use the `$completeTaskToolName` tool to finish and provide your detailed, condensed, complete, 
-            accurate report to the lead researcher.
+            accurate report to the lead researcher. DO NOT call tools not mentioned above
             """.trimIndent()
     }
 }

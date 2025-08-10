@@ -43,10 +43,11 @@ class MockToolSet: ToolSet {
 
     @Tool
     @LLMDescription("Time travel to when the work is complete")
-    suspend fun timeTravel() {
+    suspend fun timeTravel(): String {
         println("Tool run: Time travelling...")
         while (workInProgress) {
             delay(500L)
         }
+        return "Time has passed, now, check progress"
     }
 }
