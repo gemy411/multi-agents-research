@@ -1,5 +1,6 @@
 package com.gemy
 
+import com.gemy.agents.LeadResearchAgentFactory
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -7,7 +8,15 @@ import io.ktor.server.routing.*
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respondText("Hello World!")
+            val agent = LeadResearchAgentFactory().getAgent()
+            val result = agent.run("Websites like OpenRouter for LLM proxy-ing, find the top 5")
+            val print = """
+        ***************==========Agent Result======================***************
+        $result
+        ***************==========Agent Result======================***************
+    """.trimIndent()
+            println(print)
+            call.respondText(print)
         }
     }
 }
