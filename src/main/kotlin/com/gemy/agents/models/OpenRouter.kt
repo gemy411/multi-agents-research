@@ -30,6 +30,18 @@ object OpenRouterConfig {
             connectTimeoutMillis = 15_000
             socketTimeoutMillis = 60_000
         }
+        install(HttpRequestRetry) {
+            retryOnExceptionOrServerErrors(
+                maxRetries = 4,
+            )
+            exponentialDelay(
+                base = 2.0,
+                baseDelayMs = 100L,
+                maxDelayMs = 1_000,
+            )
+            modifyRequest { it.headers.append("X-Retry", retryCount.toString()) }
+        }
+
     }
     private val client = OpenRouterLLMClient(
         apiKey = apiKey,
