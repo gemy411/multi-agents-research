@@ -1,11 +1,40 @@
 package com.gemy.agents.models
 
-import ai.koog.prompt.executor.llms.all.simpleOpenRouterExecutor
+import ai.koog.prompt.executor.clients.ConnectionTimeoutConfig
+import ai.koog.prompt.executor.clients.openrouter.OpenRouterClientSettings
+import ai.koog.prompt.executor.clients.openrouter.OpenRouterLLMClient
+import ai.koog.prompt.executor.llms.SingleLLMPromptExecutor
 import io.github.cdimascio.dotenv.Dotenv
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
+import kotlinx.coroutines.Dispatchers
 
 object OpenRouterConfig {
     private val dotenv = Dotenv.load()
     private val apiKey = dotenv.get("OPEN_ROUTER_API_KEY") ?: throw IllegalArgumentException("OPEN_ROUTER_API_KEY not found in .env file")
     // Use the OpenAI executor with an API key from an environment variable
-    val openRouterExecutor = simpleOpenRouterExecutor(apiKey)
+    private val httpClient = HttpClient(io.ktor.client.engine.cio.CIO) {
+        engine {
+            dispatcher = Dispatchers.IO
+            endpoint {
+                maxConnectionsPerRoute = 128
+                connectTimeout = 50_000
+                keepAliveTime = 50_000
+                connectAttempts = 4
+            }
+        }
+
+        install(HttpTimeout) {
+            requestTimeoutMillis = 60_000
+            connectTimeoutMillis = 15_000
+            socketTimeoutMillis = 60_000
+        }
+    }
+    private val client = OpenRouterLLMClient(
+        apiKey = apiKey,
+        settings = OpenRouterClientSettings(timeoutConfig = ConnectionTimeoutConfig()),
+        baseClient = httpClient,
+    )
+    val openRouterExecutor = SingleLLMPromptExecutor(client)
 }
