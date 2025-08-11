@@ -14,7 +14,7 @@ import com.gemy.agents.runSearchQuery
             query: String,
         ): String {
             println("Subagent Tool run: Searching for $query...")
-            val result = runSearchQuery(query)
+            val result = runSearchQuery(query, deep = false)
             println("Subagent Tool run: Search result for query $query is: $result")
             return result
         }
@@ -25,7 +25,7 @@ import com.gemy.agents.runSearchQuery
             query: String,
         ): String {
             println("Subagent Tool run: Deep searching for $query...")
-            val result = runSearchQuery(query)
+            val result = runSearchQuery(query, deep = true)
             println("Subagent Tool run: Deep search result for query $query is: $result")
             return result
         }
