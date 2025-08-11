@@ -9,7 +9,7 @@ import ai.koog.agents.core.tools.ToolRegistry
 import ai.koog.agents.core.tools.reflect.tools
 import ai.koog.prompt.dsl.Prompt
 import com.gemy.agents.models.OpenRouterConfig.openRouterExecutor
-import com.gemy.agents.models.geminiFlashModel
+import com.gemy.agents.models.gptOss
 import com.gemy.agents.tools.ResearchSubagentTools
 
 class ResearchSubagentFactory() {
@@ -29,10 +29,10 @@ class ResearchSubagentFactory() {
             tools(ResearchSubagentTools())
         }
         val config = AIAgentConfig(
-            prompt = Prompt.build("research-sub-agent") {
+            prompt = Prompt.build("research-sub-agent-${System.currentTimeMillis()}") {
                 system(PromptFactory().getResearchSubagentPrompt(completeTaskToolName = completeTaskTool))
             },
-            model = geminiFlashModel,
+            model = gptOss,
             maxAgentIterations = 30,
         )
         val agent = AIAgent(
