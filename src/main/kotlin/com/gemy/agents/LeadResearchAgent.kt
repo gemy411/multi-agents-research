@@ -19,10 +19,17 @@ class LeadResearchAgentFactory() {
             val sendInput by nodeLLMRequestMultiple("requestInput")
             val useTool by nodeExecuteMultipleTools(parallelTools = true)
             val sendToolResult by nodeLLMSendMultipleToolResults("sendToolResult")
+            val compress by nodeLLMCompressHistory<String>(
+                name = "Compress history",
+                strategy = HistoryCompressionStrategy.WholeHistory,
+                retrievalModel = geminiFlashModel
+            )
             edge(nodeStart forwardTo sendInput)
             edge(sendInput forwardTo useTool onMultipleToolCalls {true})
             edge(useTool forwardTo sendToolResult)
             edge(sendToolResult forwardTo useTool onMultipleToolCalls { it.isNotEmpty() })
+            edge(sendToolResult forwardTo compress onCondition { llm.readSession { prompt.messages.size > 20 }} transformed { it.joinToString { it.content }})
+            edge(compress forwardTo sendInput)
             edge(sendToolResult forwardTo nodeFinish onMultipleAssistantMessages {true} transformed { it.joinToString { it.content }})
         }
         val toolRegistry = ToolRegistry {
@@ -47,7 +54,7 @@ class LeadResearchAgentFactory() {
 
 suspend fun main() {
     val agent = LeadResearchAgentFactory().getAgent()
-    val result = agent.run("Websites like OpenRouter for LLM proxy-ing")
+    val result = agent.run("Compare gemini flash 2.5, gemini pro 2.5 and gpt-5")
     val print = """
         ***************==========Agent Result======================***************
         $result
