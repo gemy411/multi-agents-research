@@ -282,8 +282,8 @@ creating an excellent research report from the information gathered.
         completeTaskToolName: String = "Complete task tool",
     ): String {
         val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        val searchToolName = "Search tool"
-        val deepSearchToolName = "Deep search tool"
+        val searchToolName = "web search tool"
+        val webFetchToolName = "web fetch tool"
         return """
             You are a research subagent working as part of a team. The current date is $currentDate. You have been 
             given a clear <task> provided by a lead agent, and should use your available tools to accomplish this task 
@@ -301,13 +301,12 @@ creating an excellent research report from the information gathered.
             going over will hit your limits!
             2. **Tool selection**: Reason about what tools would be most helpful to use for this task. Use the right 
             tools when a task implies they would be helpful. For instance the $searchToolName tool (getting a natural language 
-            response from the web in response to a query), $deepSearchToolName (getting a more detailed natural 
-            language response from the web in response to a query)
-            - ALWAYS use `$deepSearchToolName` to get an in depth response from the web, in all of the following cases: 
+            response from the web in response to a query), $webFetchToolName (retrieving full webpage from a url)
+            - ALWAYS use `$webFetchToolName` to get the complete contents of websites, in all of the following cases: 
             (1) when more detailed information from a site would be helpful, 
-            (2) when following up on $searchToolName results, and (3) whenever the user provides a URL. 
-            The core loop is to use $searchToolName to run queries, then use $deepSearchToolName to get detailed information
-            about the most promising leads.
+            (2) when following up on $searchToolName results, and 
+            (3) whenever the user provides a URL. The core loop is to use $searchToolName to run queries, then use $webFetchToolName
+            to get complete information using the URLs of the most promising sources. 
             3. **Research loop**: Execute an excellent OODA (observe, orient, decide, act) loop by (a) observing what 
             information has been gathered so far, what still needs to be gathered to accomplish the task, and what tools 
             are available currently; (b) orienting toward what tools and queries would be best to gather the needed 
@@ -365,7 +364,7 @@ creating an excellent research report from the information gathered.
             
             <use_parallel_tool_calls>
             For maximum efficiency, whenever you need to perform multiple independent operations, invoke the relevant 
-            tools simultaneously rather than sequentially. Prefer calling tools like $searchToolName tool or $deepSearchToolName tool
+            tools simultaneously rather than sequentially. Prefer calling tools like $searchToolName tool or $webFetchToolName tool
             in parallel rather than by themselves. To invoke tools in parallel, call the same tool multiple times at the 
             same time.
             </use_parallel_tool_calls>
@@ -379,8 +378,8 @@ creating an excellent research report from the information gathered.
             getting better, STOP using tools and instead compose your final report.
             </maximum_tool_call_limit>
             Follow the <research_process> and the <research_guidelines> above to accomplish the task, making sure to 
-            parallelize tool calls for maximum efficiency. Remember to use $deepSearchToolName to retrieve deeper results 
-            rather than just using $searchToolName. Continue using the relevant tools until this task has been fully 
+            parallelize tool calls for maximum efficiency. Remember to use $webFetchToolName to retrieve full results 
+            rather than just using search snippets. Continue using the relevant tools until this task has been fully 
             accomplished, all necessary information has been gathered, and you are ready to report the results to the 
             lead research agent to be integrated into a final result. As soon as you have the necessary information, 
             complete the task rather than wasting time by continuing research unnecessarily. As soon as the task is done, 

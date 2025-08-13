@@ -8,13 +8,19 @@ import io.github.cdimascio.dotenv.Dotenv
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
+import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 
 object OpenRouterConfig {
     private val dotenv = Dotenv.load()
-    private val apiKey = dotenv.get("OPEN_ROUTER_API_KEY") ?: throw IllegalArgumentException("OPEN_ROUTER_API_KEY not found in .env file")
+    val apiKey = dotenv.get("OPEN_ROUTER_API_KEY") ?: throw IllegalArgumentException("OPEN_ROUTER_API_KEY not found in .env file")
     // Use the OpenAI executor with an API key from an environment variable
-    private val httpClient = HttpClient(io.ktor.client.engine.cio.CIO) {
+    val httpClient = HttpClient(CIO) {
+        defaultRequest {
+            parameters {
+                this.append("max_tokens", "3000")
+            }
+        }
         engine {
             dispatcher = Dispatchers.IO
             endpoint {
@@ -41,7 +47,14 @@ object OpenRouterConfig {
             )
             modifyRequest { it.headers.append("X-Retry", retryCount.toString()) }
         }
-
+        
+//        install(ContentNegotiation) {
+//            json(Json {
+//                prettyPrint = true
+//                isLenient = true
+//                ignoreUnknownKeys = true
+//            })
+//        }
     }
     private val client = OpenRouterLLMClient(
         apiKey = apiKey,
