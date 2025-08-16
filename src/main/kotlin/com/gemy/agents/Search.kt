@@ -28,41 +28,6 @@ fun main() {
         val anotherQuery = runSearchQuery(url, true)
         println("\nSearch file test: getting contents:")
         println(anotherQuery)
-        val index = OpenRouterConfig.openRouterExecutor.executeStructured(
-            prompt = prompt("structured-data") {
-                system(
-                    """You are a page index extractor, You will digest string content to derive a list of 
-                        section titles in a page.
-                    """.trimIndent())
-                user(
-                    "Process $anotherQuery"
-                )
-            },
-            structure = JsonStructuredData.createJsonStructure<PageContentIndex>(
-                schemaFormat = JsonSchemaGenerator.SchemaFormat.JsonSchema,
-                examples = PageContentIndex.examples,
-                schemaType = JsonStructuredData.JsonSchemaType.SIMPLE
-            ),
-            mainModel = geminiFlashModel,
-            retries = 2,
-            fixingModel = geminiProModel,
-        )
-        val fullContent = index.getOrThrow().let { res ->
-            println("\n the obj is $res")
-            supervisorScope {
-                res.structure.sectionNames.map { name ->
-                    async { runSearchQuery(
-                        input = """If the contents of the page $url are divided into this list of sections: ${res.structure.sectionNames}
-                            What will be the full contents of the section $name?
-                    """.trimIndent(),
-                        getPage = false,
-                        withCitation = false,
-                    ) }
-                }.awaitAll().joinToString("\n\n")
-            }
-        }
-        println("\nFull page result is: \n\n")
-        println(fullContent)
     }
 }
 @Serializable
@@ -128,7 +93,7 @@ private suspend fun runDirectOpenRouterQuery(
                 addJsonObject {
                     put("role", "user")
                     put("content", if (!getPage) input else """
-                        For $input: If this page's content can be divided into at least 3-7 sections in a Json array of section titles
+                        For $input: If this page's content can be divided into 2-4 sections in a Json array of section titles
                         What will the array be?
                     """.trimIndent())
                 }
@@ -152,7 +117,7 @@ suspend fun runSearchQuery(input: String, getPage: Boolean, withCitation: Boolea
     val citations = jsonResponse["citations"]?.jsonArray
 
     // Append citations to content if available
-    val result = if (citations != null && citations.isNotEmpty() && !getPage && withCitation) {
+    var result = if (citations != null && citations.isNotEmpty() && !getPage && withCitation) {
         val citationsText = citations.mapIndexed { ind, str ->
             """
                 ${ind+1}. ${str.jsonPrimitive.content}
@@ -161,6 +126,41 @@ suspend fun runSearchQuery(input: String, getPage: Boolean, withCitation: Boolea
         "$content\n\nCitations:\n$citationsText"
     } else {
         content
+    }
+    if (getPage) {
+        val index = OpenRouterConfig.openRouterExecutor.executeStructured(
+            prompt = prompt("structured-data") {
+                system(
+                    """You are a page index extractor, You will digest string content to derive a list of 
+                        section titles in a page. Do NOT return more than 4 sections.
+                    """.trimIndent())
+                user(
+                    "Process $input"
+                )
+            },
+            structure = JsonStructuredData.createJsonStructure<PageContentIndex>(
+                schemaFormat = JsonSchemaGenerator.SchemaFormat.JsonSchema,
+                examples = PageContentIndex.examples,
+                schemaType = JsonStructuredData.JsonSchemaType.SIMPLE
+            ),
+            mainModel = geminiFlashModel,
+            retries = 2,
+            fixingModel = geminiProModel,
+        )
+        result = index.getOrThrow().let { res ->
+            println("Search file test: the obj is ${res.structure}")
+            supervisorScope {
+                res.structure.sectionNames.map { name ->
+                    async { runSearchQuery(
+                        input = """If the contents of the page $input are divided into this list of sections: ${res.structure.sectionNames}
+                            What will be the full contents of the section $name?
+                    """.trimIndent(),
+                        getPage = false,
+                        withCitation = false,
+                    ) }
+                }.awaitAll().joinToString("\n\n")
+            }
+        }
     }
     return result
 }
