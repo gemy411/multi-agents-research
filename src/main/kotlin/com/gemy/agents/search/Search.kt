@@ -1,6 +1,5 @@
 package com.gemy.agents.search
 
-import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.prompt.dsl.prompt
 import ai.koog.prompt.structure.executeStructured
 import ai.koog.prompt.structure.json.JsonSchemaGenerator
@@ -16,8 +15,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
 fun main() {
@@ -30,36 +27,32 @@ fun main() {
         println(anotherQuery)
     }
 }
-@Serializable
-@SerialName("PageContentIndex")
-data class PageContentIndex(
-    @property:LLMDescription("A list containing the titles of the sections in a page")
-    val sectionNames: List<String>,
-) {
-    companion object {
-        val examples = listOf(
-            PageContentIndex(
-                listOf(
-                    "Introduction to Subagents",
-                    "Subagent Configuration",
-                    "User vs Project Subagents",
-                    "Creating Custom Subagents",
-                    "Using Subagents Automatically",
-                    "Explicitly Requesting Subagents",
-                )
-            ),
-            PageContentIndex(
-                listOf(
-                    "The definitions of function programming",
-                    "Usages of function programming",
-                    "Example of functional programming in a banking system",
-                    "Example of functional programming in a restaurant management system",
-                )
-            )
-        )
+/**
+ * Run a search query.
+ *
+ * - When getPage=false: performs a normal search Q&A against OpenRouter and appends citations.
+ * - When getPage=true: derives page sections and fetches each section's content; citations are omitted.
+ *
+ * @param input the text query or page URL.
+ * @param getPage whether to get page section contents instead of a normal answer.
+ * @param withCitation include citations for normal queries.
+ */
+suspend fun runSearchQuery(input: String, getPage: Boolean, withCitation: Boolean = true): String {
+    if (!getPage) {
+        val json = runDirectOpenRouterQuery(input, getPage = false)
+        val content = extractAssistantContent(json)
+        val citations = extractCitations(json)
+        return appendCitations(content, citations, enabled = withCitation)
     }
+
+    val json = runDirectOpenRouterQuery(input, getPage = true)
+    val content = extractAssistantContent(json)
+    val sections = indexPageSections(content)
+    println("Search file test: the obj is $sections")
+    return fetchPageSectionsContent(input, sections)
 }
 
+//region private
 /**
  * Parameters used for an OpenRouter chat completion request.
  */
@@ -210,28 +203,4 @@ private suspend fun fetchPageSectionsContent(url: String, sectionNames: List<Str
         }
     }.awaitAll().joinToString("\n\n")
 }
-
-/**
- * Run a search query.
- *
- * - When getPage=false: performs a normal search Q&A against OpenRouter and appends citations.
- * - When getPage=true: derives page sections and fetches each section's content; citations are omitted.
- *
- * @param input the text query or page URL.
- * @param getPage whether to get page section contents instead of a normal answer.
- * @param withCitation include citations for normal queries.
- */
-suspend fun runSearchQuery(input: String, getPage: Boolean, withCitation: Boolean = true): String {
-    if (!getPage) {
-        val json = runDirectOpenRouterQuery(input, getPage = false)
-        val content = extractAssistantContent(json)
-        val citations = extractCitations(json)
-        return appendCitations(content, citations, enabled = withCitation)
-    }
-
-    val json = runDirectOpenRouterQuery(input, getPage = true)
-    val content = extractAssistantContent(json)
-    val sections = indexPageSections(content)
-    println("Search file test: the obj is $sections")
-    return fetchPageSectionsContent(input, sections)
-}
+//endregion
