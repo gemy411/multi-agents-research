@@ -1,4 +1,4 @@
-package com.gemy.agents
+package com.gemy.agents.search
 
 import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.prompt.dsl.prompt

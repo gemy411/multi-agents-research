@@ -1,9 +1,9 @@
-package com.gemy.agents.tools
+package com.gemy.agents.lead
 
 import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.agents.core.tools.annotations.Tool
 import ai.koog.agents.core.tools.reflect.ToolSet
-import com.gemy.agents.ResearchSubagentFactory
+import com.gemy.agents.subagent.ResearchSubagentFactory
 
 @LLMDescription("tool set to satisfy the search query")
 class ResearchLeadAgentTools: ToolSet {

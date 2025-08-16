@@ -1,6 +1,6 @@
 package com.gemy
 
-import com.gemy.agents.LeadResearchAgentFactory
+import com.gemy.agents.lead.LeadResearchAgentFactory
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*

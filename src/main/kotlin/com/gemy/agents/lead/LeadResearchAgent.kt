@@ -1,4 +1,4 @@
-package com.gemy.agents
+package com.gemy.agents.lead
 
 import ai.koog.agents.core.agent.AIAgent
 import ai.koog.agents.core.agent.config.AIAgentConfig
@@ -11,7 +11,7 @@ import ai.koog.prompt.dsl.Prompt
 import com.gemy.agents.models.OpenRouterConfig.openRouterExecutor
 import com.gemy.agents.models.geminiFlashModel
 import com.gemy.agents.models.geminiProModel
-import com.gemy.agents.tools.ResearchLeadAgentTools
+import com.gemy.agents.prompts.PromptFactory
 
 class LeadResearchAgentFactory() {
     fun getAgent(): AIAgent<String, String> {

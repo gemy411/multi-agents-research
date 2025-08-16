@@ -1,9 +1,9 @@
-package com.gemy.agents.tools
+package com.gemy.agents.subagent
 
 import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.agents.core.tools.annotations.Tool
 import ai.koog.agents.core.tools.reflect.ToolSet
-import com.gemy.agents.runSearchQuery
+import com.gemy.agents.search.runSearchQuery
 
 @LLMDescription("tool set to satisfy the search query, only tools that are available are search, deep_search, think and complete_task")
     class ResearchSubagentTools: ToolSet {

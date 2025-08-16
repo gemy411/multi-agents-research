@@ -1,4 +1,4 @@
-package com.gemy.agents.tools
+package com.gemy.agents
 
 import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.agents.core.tools.annotations.Tool

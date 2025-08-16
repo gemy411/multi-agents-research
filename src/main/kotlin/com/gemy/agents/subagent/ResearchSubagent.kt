@@ -1,4 +1,4 @@
-package com.gemy.agents
+package com.gemy.agents.subagent
 
 import ai.koog.agents.core.agent.AIAgent
 import ai.koog.agents.core.agent.config.AIAgentConfig
@@ -10,7 +10,7 @@ import ai.koog.agents.core.tools.reflect.tools
 import ai.koog.prompt.dsl.Prompt
 import com.gemy.agents.models.OpenRouterConfig.openRouterExecutor
 import com.gemy.agents.models.geminiFlashModel
-import com.gemy.agents.tools.ResearchSubagentTools
+import com.gemy.agents.prompts.PromptFactory
 
 class ResearchSubagentFactory() {
     fun getAgent(): AIAgent<String, String> {
