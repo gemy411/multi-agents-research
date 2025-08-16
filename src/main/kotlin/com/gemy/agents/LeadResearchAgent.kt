@@ -10,6 +10,7 @@ import ai.koog.agents.core.tools.reflect.tools
 import ai.koog.prompt.dsl.Prompt
 import com.gemy.agents.models.OpenRouterConfig.openRouterExecutor
 import com.gemy.agents.models.geminiFlashModel
+import com.gemy.agents.models.geminiProModel
 import com.gemy.agents.tools.ResearchLeadAgentTools
 
 class LeadResearchAgentFactory() {
@@ -39,7 +40,7 @@ class LeadResearchAgentFactory() {
             prompt = Prompt.build("research-lead-agent") {
                 system(PromptFactory().getLeadResearchPrompt(completeTaskToolName = completeTaskTool))
             },
-            model = geminiFlashModel,
+            model = geminiProModel,
             maxAgentIterations = 50,
         )
         val agent = AIAgent(
