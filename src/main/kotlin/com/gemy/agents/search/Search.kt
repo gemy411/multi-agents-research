@@ -195,7 +195,7 @@ private suspend fun fetchPageSectionsContent(url: String, sectionNames: List<Str
         async {
             runSearchQuery(
                 input = """If the contents of the page $url are divided into this list of sections: $sectionNames
-                            What will be the full contents of the section $name?
+                            What will be the full contents of the section: $name?
                 """.trimIndent(),
                 getPage = false,
                 withCitation = false,

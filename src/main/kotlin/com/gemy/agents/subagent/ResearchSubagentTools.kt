@@ -25,7 +25,7 @@ import com.gemy.agents.search.runSearchQuery
             url: String,
         ): String {
             println("Subagent Tool run: getting content of $url...")
-            val result = runSearchQuery(input = url, getPage = false)
+            val result = runSearchQuery(input = url, getPage = true)
             println("Subagent Tool run: content of $url is: $result")
             return result
         }
