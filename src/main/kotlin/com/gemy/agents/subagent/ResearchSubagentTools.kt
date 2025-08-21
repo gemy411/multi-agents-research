@@ -3,10 +3,11 @@ package com.gemy.agents.subagent
 import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.agents.core.tools.annotations.Tool
 import ai.koog.agents.core.tools.reflect.ToolSet
-import com.gemy.agents.search.runSearchQuery
+import com.gemy.agents.search.sonar.SonarSearchManager
 
 @LLMDescription("tool set to satisfy the search query, only tools that are available are search, deep_search, think and complete_task")
     class ResearchSubagentTools: ToolSet {
+        private val searchManager = SonarSearchManager()
         @Tool
         @LLMDescription("web_search tool: searches using the query and returns a natural language result")
         suspend fun webSearch(
@@ -14,7 +15,7 @@ import com.gemy.agents.search.runSearchQuery
             query: String,
         ): String {
             println("Subagent Tool run: Searching for $query...")
-            val result = runSearchQuery(input = query, getPage = false)
+            val result = searchManager.search(query)
             println("Subagent Tool run: Search result for query $query is: $result")
             return result
         }
@@ -25,7 +26,7 @@ import com.gemy.agents.search.runSearchQuery
             url: String,
         ): String {
             println("Subagent Tool run: getting content of $url...")
-            val result = runSearchQuery(input = url, getPage = true)
+            val result = searchManager.fetchWebsite(url)
             println("Subagent Tool run: content of $url is: $result")
             return result
         }

@@ -9,7 +9,6 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
-import kotlinx.coroutines.Dispatchers
 
 object OpenRouterConfig {
     private val dotenv = Dotenv.load()
@@ -22,7 +21,6 @@ object OpenRouterConfig {
             }
         }
         engine {
-            dispatcher = Dispatchers.IO
             endpoint {
                 maxConnectionsPerRoute = 128
                 connectTimeout = 50_000
@@ -48,13 +46,6 @@ object OpenRouterConfig {
             modifyRequest { it.headers.append("X-Retry", retryCount.toString()) }
         }
         
-//        install(ContentNegotiation) {
-//            json(Json {
-//                prettyPrint = true
-//                isLenient = true
-//                ignoreUnknownKeys = true
-//            })
-//        }
     }
     private val client = OpenRouterLLMClient(
         apiKey = apiKey,

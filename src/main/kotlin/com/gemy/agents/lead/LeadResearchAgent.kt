@@ -55,7 +55,7 @@ class LeadResearchAgentFactory() {
 
 suspend fun main() {
     val agent = LeadResearchAgentFactory().getAgent()
-    val result = agent.run("Compare gemini flash 2.5, gemini pro 2.5 and gpt-5")
+    val result = agent.run("Compare quickly last two kotlin subversions")
     val print = """
         ***************==========Agent Result======================***************
         $result
