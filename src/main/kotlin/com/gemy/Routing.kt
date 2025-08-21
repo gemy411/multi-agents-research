@@ -1,12 +1,14 @@
 package com.gemy
 
 import com.gemy.agents.lead.LeadResearchAgentFactory
+import com.gemy.mcp.setupMcp
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
+    setupMcp()
     routing {
         get("/search") {
             val query = call.request.queryParameters["query"]

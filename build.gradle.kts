@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.ktor.server.core)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.kotlin.mcp)
 
     implementation(libs.jetbrains.koog.agents)
     implementation(libs.dotenv.kotlin)
