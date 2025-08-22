@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kotlin-research-agents
+    ports:
+      - '${PORT}:${PORT}'
+    volumes:
+      - ./.env:/.env

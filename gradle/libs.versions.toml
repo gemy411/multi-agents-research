@@ -9,7 +9,10 @@ ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-
+jetbrains-koog-agents = { module = "ai.koog:koog-agents", version = "0.3.0" }
+dotenv-kotlin = { module = "io.github.cdimascio:dotenv-kotlin", version = "6.5.1" }
+kotlin-mcp = { module = "io.modelcontextprotocol:kotlin-sdk", version = "0.6.0" }
 [plugins]
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
