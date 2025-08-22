@@ -264,7 +264,7 @@ This project demonstrates multi-agent coordination and can be extended with:
 - Functional citation management
 - Performance monitoring and analytics
 
-**For more details check the [Roadmap.md](Roadmap.md)**
+**For more details check the [Roadmap.md](ROADMAP.md)**
 
 ---
 
