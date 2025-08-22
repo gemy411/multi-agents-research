@@ -11,6 +11,10 @@ application {
     mainClass = "com.gemy.ApplicationKt"
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.cio)
