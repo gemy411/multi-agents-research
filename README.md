@@ -187,10 +187,14 @@ Process:
 ## Installation & Running
 
 ### Environment Setup
-Configure your environment variables:
+Configure your environment variables by copying the example environment file:
 ```bash
-# OpenRouter API configuration
-OPENROUTER_API_KEY=your_api_key_here
+# Copy the example environment file
+cp example.env .env
+
+# Edit the .env file with your API keys
+# The .env file should contain:
+OPEN_ROUTER_API_KEY="your_api_key_here"
 ```
 
 ### Building & Running
