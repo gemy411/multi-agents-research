@@ -224,15 +224,16 @@ Responding at http://0.0.0.0:8080
 - **Tool Registry**: Dynamic tool registration and management
 
 ### Search Configuration
-- **Search Provider**: Sonar Search Manager
+- **Search Provider**: Sonar Search Manager (using Sonar by Perplexity model)
+- **Model Selection**: OpenRouter is used across the entire application to access different models, including the Sonar by Perplexity model for search functionality
 - **Content Fetching**: Content extraction from web pages
 - **Natural Language Results**: Processed search results in conversational format
 
 ## Development
 
-### Project Structure
+### Project Structure (Non-Final)
 ```
-src/main/kotlin/com/gemy/
+src/..
 ├── agents/
 │   ├── lead/              # Lead Research Agent implementation
 │   ├── subagent/          # Research Subagent implementation
@@ -251,6 +252,7 @@ src/main/kotlin/com/gemy/
 - `ResearchSubagentTools`: Tools available to subagents (webSearch, webFetch)
 - `SonarSearchManager`: Search and content fetching implementation
 
+**Note:** The complete task tool is now useless.
 ## Contributing
 
 This project demonstrates multi-agent coordination and can be extended with:
