@@ -24,8 +24,8 @@ This project adheres to a Code of Conduct that we expect all contributors to fol
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/your-username/research-agents.git
-   cd research-agents
+   git clone https://github.com/gemy411/multi-agents-research.git
+   cd multi-agents-research
    ```
 3. Set up the development environment (see [Development Setup](#development-setup))
 4. Create a new branch for your contribution:
@@ -69,8 +69,8 @@ Based on our [roadmap](ROADMAP.md), we're particularly interested in contributio
 
 1. **Clone and setup**:
    ```bash
-   git clone https://github.com/your-username/research-agents.git
-   cd research-agents
+   git clone https://github.com/gemy411/multi-agents-research.git
+   cd multi-agents-research
    ```
 
 2. **Configure environment**:
@@ -101,14 +101,14 @@ Based on our [roadmap](ROADMAP.md), we're particularly interested in contributio
 docker-compose up --build
 
 # Or build the Docker image manually
-docker build -t research-agents .
+docker build -t multi-agents-research .
 
 # Create your .env file from the example first
 cp example.env .env
 # Edit .env with your actual values
 
 # Run with env file host bind (required for environment variables)
-docker run -p 8080:8080 --env-file .env research-agents
+docker run -p 8080:8080 --env-file .env multi-agents-research
 ```
 
 ## Project Structure

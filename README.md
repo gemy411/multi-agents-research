@@ -192,9 +192,10 @@ Configure your environment variables by copying the example environment file:
 # Copy the example environment file
 cp example.env .env
 
-# Edit the .env file with your API keys
+# Edit the .env file with your API keys and port configuration
 # The .env file should contain:
 OPEN_ROUTER_API_KEY="your_api_key_here"
+PORT=4321  # Optional: server port (defaults to 8080)
 ```
 
 ### Building & Running
