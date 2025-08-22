@@ -4,7 +4,7 @@ This project aims to build a sophisticated multi-agent research system with adva
 
 ## Core Functionality Milestones
 
-- [ ] **Develop Functional Research Agents**: Create the foundational agent architecture with basic research capabilities, query processing, and information synthesis.
+- [x] **Develop Functional Research Agents**: Create the foundational agent architecture with basic research capabilities, query processing, and information synthesis.
 - [ ] **True thinking during waiting times**: While the subagents are working, the researcher can think about the previous
 results and how it can utilize the given information to proceed with further research
 - [ ] **Optimize Parallel Processing**: Implement efficient parallelism through time-travel mechanisms and progress monitoring to maximize computational resources.
@@ -14,8 +14,9 @@ results and how it can utilize the given information to proceed with further res
 ## Architectural Improvements
 
 - [ ] **Refine Architectural Structure**: Reorganize components into appropriate architectural layers to improve maintainability, scalability, and adherence to design principles.
-- [ ] **Develop HTTP API Integration**: Create a comprehensive HTTP API to enable external applications to interact with the multi-agent research system.
-- [ ] **Implement MCP Server Capabilities**: Deploy research capabilities as a Model Context Protocol (MCP) server to standardize interactions with various AI models.
+- [X] **Create a simple HTTP API**: Create an HTTP API to enable external applications to interact with the multi-agent research system.
+- [ ] **Develop HTTP API Integration**: Create a comprehensive HTTP API to enable external applications to interact with the multi-agent research system. Like choosing different operation modes that can result in different models and operation duration
+- [X] **Implement MCP Server Capabilities**: Deploy research capabilities as a Model Context Protocol (MCP) server to standardize interactions with various AI models.
 
 ## Future Enhancements
 
