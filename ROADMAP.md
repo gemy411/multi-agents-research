@@ -10,6 +10,7 @@ results and how it can utilize the given information to proceed with further res
 - [ ] **Optimize Parallel Processing**: Implement efficient parallelism through time-travel mechanisms and progress monitoring to maximize computational resources.
 - [ ] **Enhance Memory Management**: Optimize how agents store, retrieve, and utilize information to improve performance and reduce resource consumption.
 - [ ] **Implement Citation System**: Develop a robust citation framework to track information sources and ensure research credibility and traceability.
+- [ ] **Local machine scraping**: To allow cost free web fetches, an integration with an MCP server for example that allows the model to search the web from the local machine.
 
 ## Architectural Improvements
 
