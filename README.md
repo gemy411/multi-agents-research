@@ -1,6 +1,8 @@
 # Multi-Agent Research System
 
-A sophisticated multi-agent research system inspired by Anthropic's article: [Building a Multi-Agent Research System](https://www.anthropic.com/engineering/built-multi-agent-research-system). It uses coordinated AI agents to handle deep, complex research queries that require multiple perspectives and iterative investigation.
+> A sophisticated multi-agent research system inspired by Anthropic's article: [Building a Multi-Agent Research System](https://www.anthropic.com/engineering/built-multi-agent-research-system).
+
+Coordinated AI agents handle deep, complex research queries that require multiple perspectives and iterative investigation — breaking down problems in parallel, then synthesizing results into comprehensive answers.
 
 ## Table of Contents
 
@@ -85,7 +87,7 @@ The **Lead Research Agent** is the orchestrator of the entire system. It:
 - **Manages** conversation history and compresses it when needed (>20 messages)
 
 | Feature | Detail |
-|---|---|
+|:---|:---|
 | Model | Gemini Pro |
 | Max Iterations | 50 |
 | Parallel Execution | Enabled |
@@ -101,7 +103,7 @@ The **Lead Research Agent** is the orchestrator of the entire system. It:
 - **Reports** findings back to the lead agent
 
 | Feature | Detail |
-|---|---|
+|:---|:---|
 | Model | Gemini Flash |
 | Max Iterations | 30 |
 | Parallel Execution | Enabled |
@@ -135,7 +137,7 @@ Built using the [Koog AI Framework](https://docs.koog.ai/), a Kotlin-based frame
 ### Key Dependencies
 
 | Dependency | Purpose |
-|---|---|
+|:---|:---|
 | `ai.koog.agents.core.*` | Main agent framework |
 | `ai.koog.prompt.dsl.*` | Prompt engineering tools |
 | Ktor | Web server and HTTP client |
@@ -212,44 +214,42 @@ Process:
 
 ### Prerequisites
 
-- JDK 17+
+- **JDK 17+**
 - An [OpenRouter](https://openrouter.ai/) API key
 
-### Environment Setup
+### Quick Start
 
 ```bash
-# Copy the example environment file
+# 1. Set up environment
 cp example.env .env
+# Edit .env with your API key (see Configuration below)
+
+# 2. Build and run
+./gradlew run
+
+# — or with Docker —
+docker compose up
 ```
 
-Then edit `.env` with your credentials:
+> **Server ready** when you see: `Responding at http://0.0.0.0:8080`
+
+### Environment Variables
+
+Edit `.env` after copying:
 
 ```env
 OPEN_ROUTER_API_KEY="your_api_key_here"
 PORT=4321  # Optional — defaults to 8080
 ```
 
-### Build & Run
+### Build Steps
 
 ```bash
-# Build the project
+# Build only
 ./gradlew build
 
-# Run the server
+# Build and run
 ./gradlew run
-```
-
-When the server starts successfully, you'll see:
-
-```
-Application started in 0.303 seconds.
-Responding at http://0.0.0.0:8080
-```
-
-### Docker
-
-```bash
-docker compose up
 ```
 
 ## Configuration
@@ -257,7 +257,7 @@ docker compose up
 ### Agent Configuration
 
 | Setting | Lead Agent | Subagents |
-|---|---|---|
+|:---|:---:|:---:|
 | Model | Gemini Pro | Gemini Flash |
 | Max Iterations | 50 | 30 |
 | Parallel Execution | Yes | Yes |
@@ -291,7 +291,7 @@ src/
 ### Key Classes
 
 | Class | Responsibility |
-|---|---|
+|:---|:---|
 | `LeadResearchAgent` | Main orchestrating agent |
 | `ResearchSubagent` | Specialized research agents |
 | `ResearchLeadAgentTools` | Tools for lead agent (`deployAgent`) |
