@@ -2,6 +2,10 @@
 
 This project implements a sophisticated multi-agent research system based on the concepts described in Anthropic's article: [Building a Multi-Agent Research System](https://www.anthropic.com/engineering/built-multi-agent-research-system). The system leverages the power of coordinated AI agents to handle deep and complex research queries that require multiple perspectives and iterative investigation.
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/gemy411-multi-research-agents).
+
 ## Overview
 
 The system is built around a **Lead Research Agent** that orchestrates the entire research process. This lead agent has access to a powerful `deployAgent` tool that can dynamically create specialized **Research Subagents** to handle specific aspects of complex queries. The lead agent can deploy multiple subagents simultaneously and can choose to deploy additional subagents after each iteration based on the evolving needs of the research task.
